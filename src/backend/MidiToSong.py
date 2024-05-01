@@ -2,7 +2,7 @@ import mido
 import json
 from pathlib import Path
 from .enums import Note
-import io
+import os
 
 class MidiToSong:
     def __init__(self, tempo: int, name: str) -> None:
@@ -13,6 +13,7 @@ class MidiToSong:
         self.song = None
     
     def filename(self, mid: str):
+        print(os.getcwd())
         self.file = str("mids/"+mid)
         self.midiFile = mido.MidiFile(self.file)
     
