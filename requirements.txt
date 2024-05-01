@@ -2,3 +2,4 @@ pygame
 mido
 pathlib
 os
+music

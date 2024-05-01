@@ -45,7 +45,7 @@ class PianoGame:
         self.keys = []
         for x in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
             self.keys.append(
-                pygame.Rect(x, 0, self.width//key_count, self.height) # Can we make them shorter?
+                pygame.Rect(x, 0, self.width//key_count, self.height)  # Can we make them shorter?
             )
 
         for key in self.keys:
