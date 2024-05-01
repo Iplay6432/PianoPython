@@ -25,7 +25,7 @@ class PianoGame:
         while self.running:
             for event in pygame.event.get():
                 self.process_events(event)
-            self.screen.fill(Color.BLACK.value)
+            self.screen.fill(Color.BLACK)
 
             self.render_frame()
 

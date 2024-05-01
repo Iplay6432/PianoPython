@@ -1,5 +1,4 @@
-from enum import Enum, EnumMeta
-from typing import Self
+from enum import Enum
 
 __all__ = ("Note", "Color")
 
@@ -17,15 +16,7 @@ class Note(Enum):
     Bb = "Bb"
     B = "B"
 
-
-class SimpleEnum(EnumMeta):
-    def __getattribute__(self, name: str, /) -> Self:
-        attr = super().__getattribute__(name)
-        if isinstance(attr, type(self)):
-            return attr.value
-        return attr
-
-class Color(Enum):
+class Color:
     RED = "red"
     BLUE = "blue"
     GREEN = "green"
