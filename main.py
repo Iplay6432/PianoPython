@@ -7,12 +7,19 @@ from backend import SONGS, Note, Color
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
-        self.screen = pygame.display.set_mode((800, 480))
+        self.height, self.width = (800, 600)
+        self.screen = pygame.display.set_mode(self.shape)
         self.clock = pygame.time.Clock()
         self.running = True
 
         self.time = 0
         self.dt = 0
+
+        self.notes = Note
+
+    @property
+    def shape(self) -> tuple[int, int]:
+        return (self.height, self.width)
 
     def loop(self):
         while self.running:
@@ -34,7 +41,13 @@ class PianoGame:
             self.running = False
 
     def render_frame(self):
-        ...
+        height = 70
+        width = self.width // len(self.notes)
+        x = 0
+        buff = 0
+        for note in self.notes:
+            pygame.draw.rect(self.screen, Color.BLUE, pygame.Rect(x, height, x+width, height))
+            x += width + buff
 
 
 def main():
