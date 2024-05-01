@@ -5,7 +5,7 @@ __all__ = ("SONGS",)
 SONGS = []
 
 class OdeToJoy:
-    notes: dict[str, int] = {
+    notes: dict[Note, int] = {
         Note.E: 700,
         Note.E: 700,
         Note.F: 700,

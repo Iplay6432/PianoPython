@@ -1,6 +1,6 @@
 from enum import Enum
 
-__all__ = ("Note",)
+__all__ = ("Note", "Color")
 
 class Note(Enum):
     C = "C"
@@ -15,3 +15,13 @@ class Note(Enum):
     A = "A"
     Bb = "Bb"
     B = "B"
+
+class Color:
+    RED = "red"
+    BLUE = "blue"
+    GREEN = "green"
+    YELLOW = "yellow"
+    PINK = "pink"
+    PURPLE = "purple"
+    BLACK = "black"
+    WHITE = "white"
