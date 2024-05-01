@@ -41,13 +41,20 @@ class PianoGame:
             self.running = False
 
     def render_frame(self):
-        height = 70
-        width = self.width // len(self.notes)
         x = 0
         buff = 0
+        height = 110
+        width = (self.width - len(self.notes) * buff) // len(self.notes)
+        i = 0
         for note in self.notes:
-            pygame.draw.rect(self.screen, Color.BLUE, pygame.Rect(x, height, x+width, height))
-            x += width + buff
+            pygame.draw.rect(
+                self.screen,
+                Color.BLUE if i%2 else Color.RED,
+                pygame.Rect(x, 0, width, height),
+                2
+            )
+            i+=1
+            x += width
 
 
 def main():
