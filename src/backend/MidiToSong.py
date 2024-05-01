@@ -1,24 +1,29 @@
 import mido
+import json
+from pathlib import Path
+from .enums import Note
+import io
 
-class MiditoSong:
-    def __init__(self, temp, nam) -> None:
+class MidiToSong:
+    def __init__(self, tempo: int, name: str) -> None:
         self.file = None
         self.midiFile = None
-        self.tempo = temp
-        self.name = nam+"mid"
+        self.tempo = tempo
+        self.name = f"{name}"
+        self.song = None
     
-    def fileName(self, mid):
-        self.file = str(mid)
+    def filename(self, mid: str):
+        self.file = str("mids/"+mid)
         self.midiFile = mido.MidiFile(self.file)
     
-    def note_number_to_name(self, note_number):
-        note_names = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+    def note_number_to_name(self, note_number: int) -> str:
+        note_names = [note.value for note in Note]
         octave = note_number // 12 - 1
         note = note_names[note_number % 12]
-        return note + str(octave)
+        return f"{note}{octave}"
     
-    def convertToSong(self):
-        self.song = []
+    def convertToSong(self) -> list[tuple[str, int]]:
+        self.song: list[tuple[str, int]] = []
         note_start_times = {}
         absolute_time = 0
         for msg in self.midiFile.tracks[0]:
@@ -33,12 +38,7 @@ class MiditoSong:
                     note_name = self.note_number_to_name(msg.note)
                     self.song.append((note_name, note_duration*1000))
                     del note_start_times[msg.note]
-        return self.song
-       
+        
+        with (Path(__file__).parent.parent / f"jsons/{self.name}.json").open("w") as f:
+            json.dump(self.song, f, indent=4)  
 
-    
-song = "mids/give.mid"
-mysong = MiditoSong(100, "giveup")
-
-mysong.fileName(song)
-print(mysong.convertToSong())
