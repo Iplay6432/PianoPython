@@ -1,11 +1,9 @@
-from dataclasses import dataclass
 from .enums import Note
 
 __all__ = ("SONGS",)
 
 SONGS = []
 
-@dataclass
 class OdeToJoy:
     notes: dict[str, int] = {
         Note.E: 700,
