@@ -41,14 +41,15 @@ class PianoGame:
             self.running = False
 
     def render_frame(self):
-        self.key_count = 6
+        key_count = len(self.notes)
         self.keys = []
-        print(self.width,self.height)
-        for x in range(0,self.width, 1+(self.width//self.key_count)):
-            self.keys.append(pygame.Rect(x,0,self.width//self.key_count,self.height))
+        for x in range(0,self.width, 1+(self.width//key_count)):
+            self.keys.append(
+                pygame.Rect(x, 0, self.width//key_count, self.height)
+            )
 
         for key in self.keys:
-            pygame.draw.rect(self.screen, Color.WHITE, key)
+            pygame.draw.rect(self.screen, Color.BLUE, key)
         
 
 
