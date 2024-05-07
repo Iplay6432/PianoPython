@@ -3,4 +3,4 @@ mido
 pathlib
 os
 music
-serial
+pyserial
