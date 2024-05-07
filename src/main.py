@@ -1,12 +1,18 @@
 import os
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
-from backend import SONGS, Note, Color
+from backend import Note, Color #,SONGS
 
 
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
+        self.gamestate = 0 
+        #Gamestate vals:
+            #   0 = Main screen
+            #   1 = Autoplay keyboard
+            #   2 = Freeplay keyboard
+
         self.height, self.width = (600, 800)
         self.screen = pygame.display.set_mode(self.shape)
         self.clock = pygame.time.Clock()
@@ -49,7 +55,7 @@ class PianoGame:
             )
 
         for key in self.keys:
-            pygame.draw.rect(self.screen, Color.BLUE, key) # Need to add function to change color of certain keys(black keys)
+            pygame.draw.rect(self.screen, Color.WHITE, key) # Need to add function to change color of certain keys(black keys)
         
 
 
