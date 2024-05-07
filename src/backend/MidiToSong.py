@@ -38,8 +38,8 @@ class MidiToSong:
                                                         mido.bpm2tempo(self.tempo))  # assuming a tempo of 120 BPM
                     note_name = self.note_number_to_name(msg.note)
                     self.song.append((note_name, note_duration*1000))
+                    
                     del note_start_times[msg.note]
-        
         with (Path(__file__).parent.parent / f"jsons/{self.name}.json").open("w") as f:
             json.dump(self.song, f, indent=4)  
 
