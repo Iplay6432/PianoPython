@@ -3,3 +3,4 @@ mido
 pathlib
 os
 music
+serial
