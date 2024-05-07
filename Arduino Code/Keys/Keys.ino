@@ -52,6 +52,45 @@ void loop() {
     Serial.println("B1");
   }
   if (analogRead(A0) > 20) {
-    Serial.println("C2");
+    Serial.println("C+1");
+  }
+  if (digitalRead(2) == LOW) {
+    Serial.println("C0");
+  }
+  if (digitalRead(3) == LOW) {
+    Serial.println("Db0");
+  }
+  if (digitalRead(4) == LOW) {
+    Serial.println("D0");
+  }
+  if (digitalRead(5) == LOW) {
+    Serial.println("Eb0");
+  }
+  if (digitalRead(6) == LOW) {
+    Serial.println("E0");
+  }
+  if (digitalRead(7) == LOW) {
+    Serial.println("F0");
+  }
+  if (digitalRead(8) == LOW) {
+    Serial.println("Gb0");
+  }
+  if (digitalRead(9) == LOW) {
+    Serial.println("G0");
+  }
+  if (digitalRead(10) == LOW) {
+    Serial.println("Ab0");
+  }
+  if (digitalRead(11) == LOW) {
+    Serial.println("A0");
+  }
+  if (digitalRead(12) == LOW) {
+    Serial.println("Bb0");
+  }
+  if (digitalRead(13) == LOW) {
+    Serial.println("B0");
+  }
+  if (analogRead(A0) < 20) {
+    Serial.println("C+0");
   }
 }
