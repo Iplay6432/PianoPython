@@ -4,11 +4,12 @@ import pygame
 from backend import Note, Color #,SONGS
 import serial
 
+RASBERRY = (227,27,93)
 
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
-        self.gamestate = 0 
+        self.gamestate = 2
         #Gamestate vals:
             #   0 = Main screen
             #   1 = Autoplay keyboard
@@ -59,7 +60,7 @@ class PianoGame:
             for key in self.keys:
                 pygame.draw.rect(self.screen, Color.WHITE, key) # Need to add function to change color of certain keys(black keys)
         elif self.gamestate == 0:
-            self.screen.fill(Color.BLACK)
+            self.screen.fill(RASBERRY)
 
             #Render "Raspberry Pi-ano" text
             font = pygame.font.Font('freesansbold.ttf', 60)
@@ -95,6 +96,19 @@ class PianoGame:
             text_rect_6 = fur.get_rect(center=(int(self.width/2)-300, 100))
             pygame.draw.rect(self.screen,Color.WHITE,text_rect_6)
             self.screen.blit(ode,text_rect_6)
+
+            fp = font.render(" FreePlay ",True,Color.BLACK)
+            text_rect_7 = fur.get_rect(bottom=self.height-15,right=self.width-15)
+            pygame.draw.rect(self.screen,Color.WHITE,text_rect_7)
+            self.screen.blit(fp,text_rect_7)
+
+            img = pygame.image.load("piano.png")
+            size =200
+            img = pygame.transform.scale(img, (size,size))
+            self.screen.blit(img,((self.width//2)-(size//2),(self.height//2)))
+
+
+
 
 
 
