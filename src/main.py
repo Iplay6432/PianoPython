@@ -6,6 +6,7 @@ import serial
 from key import Key
 
 RASPBERRY = (227,27,93)
+GREY = (200,200,200)
 
 class PianoGame:
     def __init__(self) -> None:
@@ -53,14 +54,25 @@ class PianoGame:
         if self.gamestate==2: #FREEPLAY
             key_count = len(self.notes)
             self.keys = []
+            count = 0
+            self.screen.fill(GREY)
             for val in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
                 self.keys.append(
-                    #pygame.Rect(val, 0, self.width//key_count, self.height)  # Can we make them shorter?
-                    Key(Color.WHITE,Note.A, val, 0, (self.width//key_count), self.height)
+                    Key(
+                        Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
+                        Note.A,
+                        val,
+                        0,
+                        (self.width//key_count),
+                        self.height if count in {0,2,4,5,7,9,11,12} else (self.height//2)+75)
                 )
-
+                
+                count+=1
+            
             for key in self.keys:
-                pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
+                pygame.draw.rect(self.screen, key.current_color, key)
+            for val in range(0,self.width, 1+(self.width//key_count)):
+                pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,self.height))
         elif self.gamestate == 1:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
