@@ -4,6 +4,7 @@ import pygame
 from backend import Note, Color #,SONGS
 import serial
 from key import Key
+from learning import start
 
 RASPBERRY = (227,27,93)
 
@@ -57,11 +58,13 @@ class PianoGame:
                 self.keys.append(
                     #pygame.Rect(val, 0, self.width//key_count, self.height)  # Can we make them shorter?
                     Key(Color.WHITE,Note.A, val, 0, (self.width//key_count), self.height)
-                    
                 )
 
             for key in self.keys:
                 pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
+        elif self.gamestate == 1:
+            s#tart()
+            pass
         elif self.gamestate == 0: #MAIN START SCREEN
             self.screen.fill(RASPBERRY)
 
