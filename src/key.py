@@ -1,6 +1,7 @@
 import pygame
 from backend import Note, Color
 
+
 RASPBERRY = (227,27,93)
 
 class Key(pygame.Rect):

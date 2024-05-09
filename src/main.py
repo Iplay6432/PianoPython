@@ -4,14 +4,13 @@ import pygame
 from backend import Note, Color #,SONGS
 import serial
 from key import Key
-from learning import start
 
 RASPBERRY = (227,27,93)
 
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
-        self.gamestate = 2
+        self.gamestate = 1
         #Gamestate vals:
             #   0 = Main screen
             #   1 = Autoplay keyboard
@@ -63,7 +62,7 @@ class PianoGame:
             for key in self.keys:
                 pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
         elif self.gamestate == 1:
-            start()
+            self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
             self.screen.fill(RASPBERRY)
 
@@ -111,6 +110,20 @@ class PianoGame:
             size =200
             img = pygame.transform.scale(img, (size,size))
             self.screen.blit(img,((self.width//2)-(size//2),(self.height//2)))
+    def Learning(self):
+        key_count = len(self.notes)
+        self.keys = []
+        for val in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
+            self.height = int(self.height/2)
+            self.width = int(self.width)
+
+            self.keys.append(
+                #pygame.Rect(val, 0, self.width//key_count, self.height)  # Can we make them shorter?
+                Key(Color.WHITE,Note.A, val, 0, (self.width//key_count), self.height)
+            )
+
+        for key in self.keys:
+            pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
 
 
 
