@@ -17,7 +17,7 @@ class PianoGame:
             #   1 = Autoplay keyboard
             #   2 = Freeplay keyboard
 
-        self.height, self.width = (600, 800)
+        self.height, self.width = (600.0, 800.0)
         self.screen = pygame.display.set_mode(self.shape)
         self.clock = pygame.time.Clock()
         self.running = True
@@ -125,17 +125,26 @@ class PianoGame:
     def Learning(self):
         key_count = len(self.notes)
         self.keys = []
-        for val in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
-            self.height = int(self.height/2)
-            self.width = int(self.width)
-
+        count = 0
+        self.screen.fill(GREY)
+        
+        for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys) 
             self.keys.append(
-                #pygame.Rect(val, 0, self.width//key_count, self.height)  # Can we make them shorter?
-                Key(Color.WHITE,Note.A, val, 0, (self.width//key_count), self.height)
+                Key(
+                    Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
+                    Note.A,
+                    val,
+                    0,
+                    ((int(self.width)/1.2)//key_count),
+                    (int(self.height/2) if count in {0,2,4,5,7,9,11,12} else (int(self.height/2)//2)+75) )
             )
-
+            
+            count+=1
+        
         for key in self.keys:
-            pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
+            pygame.draw.rect(self.screen, key.current_color, key)
+        for val in range(0,int(self.width/1.2), 1+(int(int(self.width//1.2)/key_count))):
+            pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height/2)))
 
 
 
