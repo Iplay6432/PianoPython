@@ -63,8 +63,7 @@ class PianoGame:
             for key in self.keys:
                 pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
         elif self.gamestate == 1:
-            s#tart()
-            pass
+            start()
         elif self.gamestate == 0: #MAIN START SCREEN
             self.screen.fill(RASPBERRY)
 
