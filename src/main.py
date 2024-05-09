@@ -3,8 +3,9 @@ os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 from backend import Note, Color #,SONGS
 import serial
+from key import Key
 
-RASBERRY = (227,27,93)
+RASPBERRY = (227,27,93)
 
 class PianoGame:
     def __init__(self) -> None:
@@ -49,18 +50,20 @@ class PianoGame:
             self.running = False
 
     def render_frame(self):
-        if self.gamestate==2:
+        if self.gamestate==2: #FREEPLAY
             key_count = len(self.notes)
             self.keys = []
-            for x in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
+            for val in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
                 self.keys.append(
-                    pygame.Rect(x, 0, self.width//key_count, self.height)  # Can we make them shorter?
+                    #pygame.Rect(val, 0, self.width//key_count, self.height)  # Can we make them shorter?
+                    Key(Color.WHITE,Note.A, val, 0, (self.width//key_count), self.height)
+                    
                 )
 
             for key in self.keys:
-                pygame.draw.rect(self.screen, Color.WHITE, key) # Need to add function to change color of certain keys(black keys)
-        elif self.gamestate == 0:
-            self.screen.fill(RASBERRY)
+                pygame.draw.rect(self.screen, key.current_color, key) # Need to add function to change color of certain keys(black keys)
+        elif self.gamestate == 0: #MAIN START SCREEN
+            self.screen.fill(RASPBERRY)
 
             #Render "Raspberry Pi-ano" text
             font = pygame.font.Font('freesansbold.ttf', 60)
