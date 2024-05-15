@@ -18,7 +18,7 @@ class PianoGame:
             #   2 = Freeplay keyboard
 
         self.height, self.width = (600.0, 800.0)
-        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
         self.running = True
 
