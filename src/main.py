@@ -11,7 +11,7 @@ GREY = (200,200,200)
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
-        self.gamestate = 1
+        self.gamestate = 0
         #Gamestate vals:
             #   0 = Main screen
             #   1 = Autoplay keyboard
