@@ -4,6 +4,7 @@ import pygame
 from backend import Note, Color #,SONGS
 import serial
 from key import Key
+from Falling import Falling
 
 RASPBERRY = (227,27,93)
 GREY = (200,200,200)
@@ -11,7 +12,7 @@ GREY = (200,200,200)
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
-        self.gamestate = 0
+        self.gamestate = 1
         #Gamestate vals:
             #   0 = Main screen
             #   1 = Autoplay keyboard
@@ -145,6 +146,7 @@ class PianoGame:
             pygame.draw.rect(self.screen, key.current_color, key)
         for val in range(0,int(self.width/1.2), 1+(int(int(self.width/1.2)/key_count))):
             pygame.draw.line(self.screen,Color.BLACK,(val,self.height - key_height),(val,int(self.height)))
+        Falling(1,self.screen,self.height,self.width, 0,100, self.notes).place_key()
 
 
 
