@@ -7,6 +7,7 @@ RASPBERRY = (227,27,93)
 class Key(pygame.Rect):
     def __init__(self, default_color, note: Note, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+
         self.active = False
         self.default_color = default_color
         self.current_color = self.default_color
