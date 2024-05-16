@@ -32,9 +32,9 @@ class Falling(pygame.Rect):
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
     def update(self):
-        for key in self.keys:
+        for key in self.keys.copy():  # iterate over a copy of the list
             # update y-coordinate
-            key.y += 5  # adjust this value to change the speed of falling
+            key.y += self.speed  # adjust this value to change the speed of falling
 
             # redraw key
             pygame.draw.rect(self.screen, key.current_color, key)
@@ -42,4 +42,5 @@ class Falling(pygame.Rect):
             # remove key if it's off the screen
             if key.y > self.height/2:
                 self.keys.remove(key)
+        
         # pygame.draw.rect(self.screen, Color.GREEN, pygame.Rect((self.note*((self.width/1.2)/13)*2),self.location,((self.width/1.2)/13)*2,self.len))

@@ -5,6 +5,7 @@ from backend import Note, Color #,SONGS
 import serial
 from key import Key
 from Falling import Falling
+import time
 
 RASPBERRY = (227,27,93)
 GREY = (200,200,200)
@@ -27,6 +28,7 @@ class PianoGame:
         self.dt = 0
 
         self.notes = Note
+        self.ranonce = False
 
     @property
     def shape(self) -> tuple[int, int]:
@@ -39,7 +41,7 @@ class PianoGame:
             self.screen.fill(Color.BLACK)
 
             self.render_frame()
-
+            
             pygame.display.flip()
 
             self.dt = self.clock.tick(60) / 1000
@@ -129,7 +131,12 @@ class PianoGame:
         count = 0
         self.screen.fill(GREY)
         key_height = int(self.height/2)
-        
+        if self.ranonce == False:
+            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes)
+            self.falling.place_key()
+            self.ranonce = True
+        else:
+            self.falling.update()
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys) 
             self.keys.append(
                 Key(
@@ -146,17 +153,8 @@ class PianoGame:
             pygame.draw.rect(self.screen, key.current_color, key)
         for val in range(0,int(self.width/1.2), 1+(int(int(self.width/1.2)/key_count))):
             pygame.draw.line(self.screen,Color.BLACK,(val,self.height - key_height),(val,int(self.height)))
-        falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes)
-        falling.place_key()
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-            falling.update()
-
-            pygame.display.flip()
+        
+        
         
 
 
