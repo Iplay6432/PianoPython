@@ -19,7 +19,7 @@ class PianoGame:
             #   2 = Freeplay keyboard
 
         self.height, self.width = (480.0, 800.0)
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.width, self.height), )
         self.clock = pygame.time.Clock()
         self.running = True
 
@@ -57,23 +57,23 @@ class PianoGame:
             self.keys = []
             count = 0
             self.screen.fill(GREY)
-            for val in range(0,self.width, 1+(self.width//key_count)): # Need to add function to move certain keys up and down(black keys) 
+            for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys) 
                 self.keys.append(
                     Key(
                         Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
                         Note.A,
                         val,
                         0,
-                        (self.width//key_count),
-                        self.height if count in {0,2,4,5,7,9,11,12} else (self.height//2)+75)
+                        (int(self.width)//key_count),
+                        int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
                 )
                 
                 count+=1
             
             for key in self.keys:
                 pygame.draw.rect(self.screen, key.current_color, key)
-            for val in range(0,self.width, 1+(self.width//key_count)):
-                pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,self.height))
+            for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
+                pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height)))
         elif self.gamestate == 1:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
@@ -146,7 +146,18 @@ class PianoGame:
             pygame.draw.rect(self.screen, key.current_color, key)
         for val in range(0,int(self.width/1.2), 1+(int(int(self.width/1.2)/key_count))):
             pygame.draw.line(self.screen,Color.BLACK,(val,self.height - key_height),(val,int(self.height)))
-        Falling(1,self.screen,self.height,self.width, 0,100, self.notes).place_key()
+        falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes)
+        falling.place_key()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            falling.update()
+
+            pygame.display.flip()
+        
 
 
 

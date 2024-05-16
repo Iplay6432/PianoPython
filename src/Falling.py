@@ -12,25 +12,34 @@ class Falling(pygame.Rect):
         self.location = location
         self.len = len
         self.notes= notes
-
+        self.speed = 5
     def place_key(self):
         key_count = len(self.notes)
         self.keys = []
-        count = 0
-        key_height = int(self.height/2)
-        for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys) 
-            self.keys.append(
-                Key(
-                    Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
-                    Note.A,
-                    val,
-                    0,
-                    ((int(self.width/1.2))//key_count),
-                    (int(self.height - key_height) if count in {0,2,4,5,7,9,11,12} else (int(self.height - key_height)//2.5)+75) )
+        vals = [0, 56, 112, 168, 224, 280, 336, 392, 448, 504, 560, 616]
+        
+        self.keys.append(
+            Key(
+                Color.GREEN,
+                Note.A,
+                vals[self.note],
+                0,
+                (int(self.width)//key_count),
+                int(self.len))
             )
             
-            count+=1
+        
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
+    def update(self):
+        for key in self.keys:
+            # update y-coordinate
+            key.y += 5  # adjust this value to change the speed of falling
 
+            # redraw key
+            pygame.draw.rect(self.screen, key.current_color, key)
+
+            # remove key if it's off the screen
+            if key.y > self.height/2:
+                self.keys.remove(key)
         # pygame.draw.rect(self.screen, Color.GREEN, pygame.Rect((self.note*((self.width/1.2)/13)*2),self.location,((self.width/1.2)/13)*2,self.len))
