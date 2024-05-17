@@ -23,8 +23,8 @@ class MidiToSong:
         note = note_names[note_number % 12]
         return f"{note}{octave}"
     
-    def convertToSong(self) -> list[tuple[str, int]]:
-        self.song: list[tuple[str, int]] = []
+    def convertToSong(self) -> list[tuple[str, int, int]]:
+        self.song: list[tuple[str, int, int]] = []
         note_start_times = {}
         absolute_time = 0
         for msg in self.midiFile.tracks[0]:
@@ -37,9 +37,11 @@ class MidiToSong:
                                                         self.midiFile.ticks_per_beat, 
                                                         mido.bpm2tempo(self.tempo))  # assuming a tempo of 120 BPM
                     note_name = self.note_number_to_name(msg.note)
-                    self.song.append((note_name, note_duration*1000))
+                    note_start_time = mido.tick2second(note_start_times[msg.note], 
+                                                        self.midiFile.ticks_per_beat, 
+                                                        mido.bpm2tempo(self.tempo)) * 1000
+                    self.song.append((note_name, note_duration*1000, note_start_time))
                     
                     del note_start_times[msg.note]
         with (Path(__file__).parent.parent / f"jsons/{self.name}.json").open("w") as f:
-            json.dump(self.song, f, indent=4)  
-
+            json.dump(self.song, f, indent=4)
