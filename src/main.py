@@ -13,6 +13,7 @@ GREY = (200,200,200)
 class PianoGame:
     def __init__(self) -> None:
         pygame.init()
+        pygame.mixer.init()
         self.gamestate = 1
         #Gamestate vals:
             #   0 = Main screen
@@ -137,6 +138,7 @@ class PianoGame:
             self.ranonce = True
         else:
             self.falling.update()
+        pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys) 
             self.keys.append(
                 Key(
@@ -152,6 +154,7 @@ class PianoGame:
             pygame.draw.rect(self.screen, key.current_color, key)
         for val in range(0,int(self.width/1.2), 1+(int(int(self.width/1.2)/key_count))):
             pygame.draw.line(self.screen,Color.BLACK,(val,self.height - key_height),(val,int(self.height)))
+        
         
         
         
