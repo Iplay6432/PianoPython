@@ -147,7 +147,6 @@ class PianoGame:
                     ((int(self.width/1.2))//key_count),
                     (int(self.height - key_height) if count in {0,2,4,5,7,9,11,12} else (int(self.height - key_height)//2.5)+75) )
             )
-            
             count+=1
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
