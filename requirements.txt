@@ -4,3 +4,4 @@ pathlib
 os
 music
 pyserial
+re
