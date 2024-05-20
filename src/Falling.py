@@ -84,7 +84,7 @@ class Falling(pygame.Rect):
                 pygame.draw.rect(self.screen, key.current_color, key)
                 # remove key if it's off the screen
                 
-                if self.height /2 > key.y > self.height/2 - selsf.lengths[i]:
+                if self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
