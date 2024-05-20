@@ -38,7 +38,7 @@ class Falling(pygame.Rect):
         thread.start()
     def _play_wav(self, wav_file):
         # Load audio file
-        sound = pygame.mixer.load(wav_file)
+        sound = pygame.mixer.Sound(wav_file)
 
         # Play audio file
         sound.play()
@@ -73,11 +73,11 @@ class Falling(pygame.Rect):
             pygame.draw.rect(self.screen, key.current_color, key)
         for key in self.keys:
             key.played = False
-        self.play_wav("notes/A3.mid")
+        self.play_wav("notes/A3.wav")
         self.start_time = time.time()
     def update(self):
-        i = 0
-        for key in self.keys.copy():  # iterate over a copy of the list
+        for i in range(len(self.keys) -1):  # iterate over the indices of the list
+            key = self.keys[i]  # get the key at the current index
             timefrom = self.song[i][2]/1000
             if time.time() - self.start_time > timefrom:
                 # update y-coordinate
@@ -91,14 +91,9 @@ class Falling(pygame.Rect):
                     self.keys.remove(key)
                 elif self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
-                    print(key.played)
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
-                        self.play_wav(f"notes/{self.song[i][0]}.mid")
-                        print("Playing sound")
-                
-                
-                        
-            i +=1
+                        self.play_wav(f"notes/{self.song[i][0]}.wav")
+                        print(f"notes/{self.song[i][0]}.wav")
 
         # pygame.draw.rect(self.screen, Color.GREEN, pygame.Rect((self.note*((self.width/1.2)/13)*2),self.location,((self.width/1.2)/13)*2,self.len))
