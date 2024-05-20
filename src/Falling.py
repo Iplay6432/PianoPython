@@ -21,7 +21,7 @@ class Falling(pygame.Rect):
         self.start_time = 0
         self.lengths =  []
         self.executor = ThreadPoolExecutor(max_workers=10)
-        with open("jsons/Give.json") as f:
+        with open("jsons/under.json") as f:
             self.song = json.load(f)
  
     def play_wav(self, wav_file, times):
@@ -82,18 +82,14 @@ class Falling(pygame.Rect):
 
                 # redraw key
                 pygame.draw.rect(self.screen, key.current_color, key)
-
                 # remove key if it's off the screen
                 
-                if self.height /2 > key.y > self.height/2 - self.lengths[i]:
+                if self.height /2 > key.y > self.height/2 - selsf.lengths[i]:
                     key.current_color = Color.RED
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
                         self.play_wav(f"notes/{self.song[i][0]}.wav", self.song[i][1])
-                        print(i)
-                        print(f"notes/{self.song[i][0]}.wav")
+    
                 # elif key.y > self.height / 2:
                 #     self.keys.remove(key)
                 
-
-        # pygame.draw.rect(self.screen, Color.GREEN, pygame.Rect((self.note*((self.width/1.2)/13)*2),self.location,((self.width/1.2)/13)*2,self.len))

@@ -1,5 +1,5 @@
 from backend.MidiToSong import MidiToSong
 
-mySong = MidiToSong(20, "Lamb")
-mySong.filename("Lamb.mid")
+mySong = MidiToSong(30, "under")
+mySong.filename("under.mid")
 mySong.convertToSong()
