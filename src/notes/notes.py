@@ -33,5 +33,5 @@ for note_name, midi_number in tqdm(notes.items()):
         track.append(mido.Message('note_off', note=pitch, velocity=127, time=int(duration * 480)))  # 480 ticks per beat
 
         # Write it to disk
-        midi_file_name = note_name + str(octave) + '.mid'
+        midi_file_name = note_name + str(octave -1) + '.mid'
         mid.save(midi_file_name)
