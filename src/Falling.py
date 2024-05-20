@@ -88,12 +88,13 @@ class Falling(pygame.Rect):
                 elif self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     print("About to crash")
                     key.current_color = Color.RED
-                    
-            if time.time() - self.start_time > timefrom:
-                if not hasattr(key, 'sine_called') or not key.sine_called:
+                    if not hasattr(key, 'sine_called') or not key.sine_called:
+                        key.sine_called = True
                         self.executor.submit(self.play_wav, f"notes/{self.song[i][0]}.wav", self.song[i][1]/1000)
                         print("Playing sound")
-                        key.sine_called = True
+                    
+                
+                        
             i +=1
 
         # pygame.draw.rect(self.screen, Color.GREEN, pygame.Rect((self.note*((self.width/1.2)/13)*2),self.location,((self.width/1.2)/13)*2,self.len))
