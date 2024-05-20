@@ -28,7 +28,7 @@ for note_name, midi_number in tqdm(notes.items()):
         pitch = midi_number + (octave) * 12
         if pitch > 127:  # Skip pitches that exceed the MIDI limit
             continue
-        duration = 12  # In beats
+        duration = 2  # In beats
         track.append(mido.Message('note_on', note=pitch, velocity=64, time=0))
         track.append(mido.Message('note_off', note=pitch, velocity=127, time=int(duration * 480)))  # 480 ticks per beat
 

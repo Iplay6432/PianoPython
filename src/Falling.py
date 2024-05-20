@@ -1,4 +1,3 @@
-import pygame
 from backend import Note, Color
 from key import Key
 import json
@@ -13,6 +12,8 @@ import threading
 import soundfile as sf
 import sounddevice as sd
 import time
+import pygame.mixer
+
 class Falling(pygame.Rect):
     def __init__(self, note, screen, height, width, location, len, notes):  # note is the index
         # super.__init__(args)
@@ -37,10 +38,10 @@ class Falling(pygame.Rect):
         thread.start()
     def _play_wav(self, wav_file):
         # Load audio file
-        audio = AudioSegment.from_wav(wav_file)
+        sound = pygame.mixer.Sound(wav_file)
 
-        # Play audio file in a separate thread
-        self.executor.submit(play, audio)
+        # Play audio file
+        sound.play()
     def place_key(self): 
         key_count = len(self.notes)
         self.keys = []
@@ -70,7 +71,9 @@ class Falling(pygame.Rect):
 
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
-        self.play_wav("notes/A3.wav")
+        for key in self.keys:
+            key.played = False
+        self.play_wav("notes/A3.mid")
         self.start_time = time.time()
     def update(self):
         i = 0
@@ -87,13 +90,13 @@ class Falling(pygame.Rect):
                 if key.y > self.height / 2:
                     self.keys.remove(key)
                 elif self.height /2 > key.y > self.height/2 - self.lengths[i]:
-                    print("About to crash")
                     key.current_color = Color.RED
-                    if not hasattr(key, 'sine_called') or not key.sine_called:
-                        key.sine_called = True
-                        self.play_wav(f"notes/{self.song[i][0]}.wav")
+                    print(key.played)
+                    if not hasattr(key, 'played') or not key.played:
+                        key.played = True
+                        self.play_wav(f"notes/{self.song[i][0]}.mid")
                         print("Playing sound")
-                    
+                
                 
                         
             i +=1
