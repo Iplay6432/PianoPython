@@ -6,7 +6,10 @@ from pysine import sine
 import time
 from gensound import Sine
 from mido import MidiFile
+from pydub import AudioSegment
+from pydub.playback import play
 from concurrent.futures import ThreadPoolExecutor
+import threading
 import soundfile as sf
 import sounddevice as sd
 import time
@@ -23,23 +26,21 @@ class Falling(pygame.Rect):
         self.speed = 1
         self.start_time = 0
         self.lengths =  []
-        self.executor = ThreadPoolExecutor(max_workers=5)
+        self.executor = ThreadPoolExecutor(max_workers=10)
         with open("jsons/Lamb.json") as f:
             self.song = json.load(f)
  
+    def play_wav(self, wav_file):
+        # Create a new thread that will play the sound
+        thread = threading.Thread(target=self._play_wav, args=(wav_file,))
+        # Start the new thread
+        thread.start()
+    def _play_wav(self, wav_file):
+        # Load audio file
+        audio = AudioSegment.from_wav(wav_file)
 
-    def play_wav(self, wav_file, duration):
-        # Read file
-        data, fs = sf.read(wav_file, dtype='float32')  
-
-        # Start playback
-        sd.play(data, fs)
-
-        # Sleep for duration
-        time.sleep(duration)
-
-        # Stop playback
-        sd.stop()
+        # Play audio file in a separate thread
+        self.executor.submit(play, audio)
     def place_key(self): 
         key_count = len(self.notes)
         self.keys = []
@@ -69,7 +70,7 @@ class Falling(pygame.Rect):
 
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
-        self.play_wav("notes/A3.wav", 1)
+        self.play_wav("notes/A3.wav")
         self.start_time = time.time()
     def update(self):
         i = 0
@@ -90,7 +91,7 @@ class Falling(pygame.Rect):
                     key.current_color = Color.RED
                     if not hasattr(key, 'sine_called') or not key.sine_called:
                         key.sine_called = True
-                        self.executor.submit(self.play_wav, f"notes/{self.song[i][0]}.wav", self.song[i][1]/1000)
+                        self.play_wav(f"notes/{self.song[i][0]}.wav")
                         print("Playing sound")
                     
                 
