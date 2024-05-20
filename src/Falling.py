@@ -1,16 +1,9 @@
 from backend import Note, Color
 from key import Key
 import json
-from pysine import sine
 import time
-from gensound import Sine
-from mido import MidiFile
-from pydub import AudioSegment
-from pydub.playback import play
 from concurrent.futures import ThreadPoolExecutor
 import threading
-import soundfile as sf
-import sounddevice as sd
 import time
 import pygame.mixer
 

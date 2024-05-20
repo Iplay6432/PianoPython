@@ -1,4 +1,3 @@
-import os
 import mido
 from tqdm import tqdm
 

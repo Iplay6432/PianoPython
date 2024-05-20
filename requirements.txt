@@ -1,12 +1,4 @@
 pygame
 mido
-pathlib
-os
 music
 pyserial
-re
-time
-pysine
-librosa
-soundfile
-sounddevice
