@@ -130,15 +130,20 @@ class PianoGame:
     def Learning(self):
         key_count = len(self.notes)
         self.keys = []
+        valss = []
         count = 0
         self.screen.fill(GREY)
         key_height = int(self.height/2)
+        for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)):
+            valss.append(val)
+            count += 1
         if self.ranonce == False:
-            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "rushe")
+            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "give",valss)
             self.falling.place_key()
             self.ranonce = True
         else:
             self.falling.update()
+        count = 0
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys) 
             self.keys.append(

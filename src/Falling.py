@@ -8,7 +8,7 @@ import time
 import pygame.mixer
 
 class Falling(pygame.Rect):
-    def __init__(self, note, screen, height, width, location, len, notes, songname):  # note is the index
+    def __init__(self, note, screen, height, width, location, len, notes, songname, valss):  # note is the index
         # super.__init__(args)
         self.note = note
         self.screen = screen
@@ -20,6 +20,7 @@ class Falling(pygame.Rect):
         self.speed = 1
         self.start_time = 0
         self.lengths =  []
+        self.vals = valss
         self.executor = ThreadPoolExecutor(max_workers=10)
         with open(f"jsons/{songname}.json") as f:
             self.song = json.load(f)
@@ -44,7 +45,7 @@ class Falling(pygame.Rect):
     def place_key(self): 
         key_count = len(self.notes)
         self.keys = []
-        vals = [0, 52, 104, 156, 208, 260, 312, 364, 416, 468, 520, 572, 624]
+        vals = self.vals
         note_names = list(Note.__members__.keys())
     
         for note in self.song:
@@ -72,7 +73,6 @@ class Falling(pygame.Rect):
             pygame.draw.rect(self.screen, key.current_color, key)
             pygame.draw.rect(self.screen, Color.BLUE, key, 1)
             key.played = False
-        self.play_wav("notes/A3.wav", 2)
         self.start_time = time.time()
     def update(self):
         for i in range(len(self.keys)):  # iterate over the indices of the list
