@@ -92,9 +92,10 @@ class Falling(pygame.Rect):
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
                         self.play_wav(f"notes/{self.song[i][0]}.wav", self.song[i][1])
-    
-        # for key in self.keys:
-        #     key = self.keys[i]
-        #     if key.played:
-        #         self.keys.remove(key)
+        d = 0
+        for key in self.keys:
+            key = self.keys[i - d]
+            if key.played:
+                self.keys.remove(key)
+                d +=1 
                 
