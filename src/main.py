@@ -21,6 +21,7 @@ class PianoGame:
             #   2 = Freeplay keyboard
 
         self.height, self.width = (480.0, 800.0)
+        self.vals = []
         self.screen = pygame.display.set_mode((self.width, self.height), )
         self.clock = pygame.time.Clock()
         self.running = True
@@ -133,7 +134,7 @@ class PianoGame:
         self.screen.fill(GREY)
         key_height = int(self.height/2)
         if self.ranonce == False:
-            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes)
+            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "rushe")
             self.falling.place_key()
             self.ranonce = True
         else:

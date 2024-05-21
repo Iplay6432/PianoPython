@@ -15,6 +15,7 @@ class Note(Enum):
     A = "A"
     Bb = "Bb"
     B = "B"
+    Empty = ""
 
 class Color:
     RED = "red"

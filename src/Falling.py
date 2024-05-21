@@ -8,7 +8,7 @@ import time
 import pygame.mixer
 
 class Falling(pygame.Rect):
-    def __init__(self, note, screen, height, width, location, len, notes):  # note is the index
+    def __init__(self, note, screen, height, width, location, len, notes, songname):  # note is the index
         # super.__init__(args)
         self.note = note
         self.screen = screen
@@ -21,7 +21,7 @@ class Falling(pygame.Rect):
         self.start_time = 0
         self.lengths =  []
         self.executor = ThreadPoolExecutor(max_workers=10)
-        with open("jsons/rushe.json") as f:
+        with open(f"jsons/{songname}.json") as f:
             self.song = json.load(f)
  
     def play_wav(self, wav_file, times):
@@ -32,6 +32,7 @@ class Falling(pygame.Rect):
     def _play_wav(self, wav_file, times):
         # Load audio file
         sound = pygame.mixer.Sound(wav_file)
+        sound.set_volume(2.0)
         if times < 1000:
             sound.play()
             time.sleep(times/1000)
@@ -43,7 +44,7 @@ class Falling(pygame.Rect):
     def place_key(self): 
         key_count = len(self.notes)
         self.keys = []
-        vals = [0, 56, 112, 168, 224, 280, 336, 392, 448, 504, 560, 616]
+        vals = [0, 52, 104, 156, 208, 260, 312, 364, 416, 468, 520, 572, 624]
         note_names = list(Note.__members__.keys())
     
         for note in self.song:
@@ -59,7 +60,7 @@ class Falling(pygame.Rect):
             self.keys.append(
                 Key(
                     Color.GREEN,
-                    Note.A,
+                    Note.Empty,
                     no,
                     -1*lens,
                     (int(self.width) // key_count),
@@ -84,14 +85,16 @@ class Falling(pygame.Rect):
                 # redraw key
                 pygame.draw.rect(self.screen, key.current_color, key)
                 pygame.draw.rect(self.screen, Color.BLUE, key, 1)
-                # remove key if it's off the screen
                 
                 if self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
+                    pygame.draw.rect(self.screen, Color.YELLOW, key, 1)
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
                         self.play_wav(f"notes/{self.song[i][0]}.wav", self.song[i][1])
     
-                # elif key.y > self.height / 2:
-                #     self.keys.remove(key)
+        # for key in self.keys:
+        #     key = self.keys[i]
+        #     if key.played:
+        #         self.keys.remove(key)
                 
