@@ -37,7 +37,7 @@ class Falling(pygame.Rect):
         if times < 1000:
             sound.play()
             time.sleep(times/1000)
-            sound.stop()
+            sound.fadeout(100)
         else:
             sound.play()
         # Play audio file
