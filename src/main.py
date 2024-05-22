@@ -100,7 +100,7 @@ class PianoGame:
 
         # Play audio file
     def _play_note(self, note: Note) -> None:
-        sound = pygame.mixer.Sound(f"notes/{note}5.wav")
+        sound = pygame.mixer.Sound(f"notes/{note.value}5.wav")
         sound.play()
 
     def stop_note(self, note: Note):
