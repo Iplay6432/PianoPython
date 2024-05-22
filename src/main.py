@@ -31,7 +31,7 @@ class PianoGame:
 
         self.time = 0
         self.dt = 0
-
+        self.plays =[]
         self.notes = Note
         self.ranonce = False
         self.queue = queue.Queue()
@@ -101,12 +101,14 @@ class PianoGame:
         # Play audio file
     def _play_note(self, note: Note) -> None:
         sound = pygame.mixer.Sound(f"notes/{note.value}5.wav")
+        self.plays.append(note.value)
         sound.play()
 
     def stop_note(self, note: Note):
         playing = self.playing.get(note)
         if playing is not None:
             playing.join(timeout=.2)
+            self.plays.remove(note.value)
 
 
     def render_frame(self):
@@ -174,11 +176,12 @@ class PianoGame:
             valss.append(val)
             count += 1
         if self.ranonce == False:
-            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "Give",valss)
+            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "Give",valss, self.plays)
             self.falling.place_key()
             self.ranonce = True
         else:
             self.falling.update()
+            self.falling.update_text()
         count = 0
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys)

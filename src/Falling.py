@@ -8,7 +8,7 @@ import time
 import pygame.mixer
 
 class Falling(pygame.Rect):
-    def __init__(self, note, screen, height, width, location, len, notes, songname, valss):  # note is the index
+    def __init__(self, note, screen, height, width, location, len, notes, songname, valss, plays):  # note is the index
         # super.__init__(args)
         self.note = note
         self.screen = screen
@@ -21,6 +21,7 @@ class Falling(pygame.Rect):
         self.start_time = 0
         self.lengths =  []
         self.vals = valss
+        self.plays = plays
         self.executor = ThreadPoolExecutor(max_workers=10)
         with open(f"jsons/{songname}.json") as f:
             self.song = json.load(f)
@@ -74,6 +75,23 @@ class Falling(pygame.Rect):
             pygame.draw.rect(self.screen, Color.BLUE, key, 1)
             key.played = False
         self.start_time = time.time()
+    def update_text(self):
+        numkey = 0
+        allkey = 0
+        for key in self.keys:
+            if hasattr(key, 'correct') and key.correct:
+                numkey += 1
+                allkey += 1
+            elif hasattr(key, 'correct') and not key.correct:
+                numkey +=1
+        durr = round((self.song[-1][2] + self.song[-1][1])/1000, 2)
+        timenow = round((time.time() - self.start_time), 2)
+        font = pygame.font.Font(None, 24)
+        text_surface = font.render(f"{round((allkey/numkey)*100, 2)} \n {timenow}/{durr}", True, Color.BLACK)
+        rect = pygame.Rect(340, 30, 100, 60)
+        pygame.draw.rect(self.screen, Color.WHITE, rect, 2)
+        self.screen.blit(text_surface, (345, 35))
+
     def update(self):
         for i in range(len(self.keys)):  # iterate over the indices of the list
             key = self.keys[i]  # get the key at the current index
@@ -92,10 +110,18 @@ class Falling(pygame.Rect):
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
                         self.play_wav(f"notes/{self.song[i][0]}.wav", self.song[i][1])
+                    if timefrom - 0.2 >time.time() - self.start_time > timefrom + 0.2:
+                        note = self.song[i][0]
+                        if len(note) == 2:
+                            if note[0] in self.plays:
+                                key.correct = True
+                        else:
+                            if note[0]+note[1] in self.plays:
+                                key.correct = True
         d = 0
-        for key in self.keys:
-            key = self.keys[i - d]
-            if key.played:
-                self.keys.remove(key)
-                d +=1
+        # for key in self.keys:
+        #     key = self.keys[i - d]
+        #     if key.played:
+        #         self.keys.remove(key)
+        #         d +=1
 
