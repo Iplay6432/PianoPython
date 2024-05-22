@@ -174,7 +174,7 @@ class PianoGame:
             valss.append(val)
             count += 1
         if self.ranonce == False:
-            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "give",valss)
+            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "Give",valss)
             self.falling.place_key()
             self.ranonce = True
         else:
