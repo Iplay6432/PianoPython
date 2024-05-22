@@ -3,7 +3,7 @@ os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 from backend import Note, Color #,SONGS
 from key import Key
-from falling import Falling
+from Falling import Falling
 from communication import read_arduino
 import multiprocessing as mp
 import queue
