@@ -1,5 +1,3 @@
-#include <string>
-
 void setup() {
   Serial.begin(9600);
   for (int i=2; i < 8; i++){
@@ -8,12 +6,13 @@ void setup() {
 }
 
 void loop() {
-  std::string output = "";
+  char output[7];
+  output[7] = '\0';
   for (int i=2; i < 8; i++) {
     if (digitalRead(i) == LOW) {
-      string += "1";
+      output[i-2] = '1';
     } else {
-      string += "0";
+      output[i-2] = '0';
     }
   }
   Serial.println(output);
