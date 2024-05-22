@@ -111,31 +111,9 @@ class PianoGame:
 
     def render_frame(self):
         if self.gamestate==2: #FREEPLAY
-            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1).place_keyboard()
+            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1)
+            keyboard.place_keyboard()
 
-
-
-            # key_count = len(self.notes)
-            # self.keys = []
-            # count = 0
-            # self.screen.fill(GREY)
-            # for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
-            #     self.keys.append(
-            #         Key(
-            #             Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
-            #             Note.A,
-            #             val,
-            #             0,
-            #             (int(self.width)//key_count),
-            #             int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
-            #     )
-
-            #     count+=1
-
-            # for key in self.keys:
-            #     pygame.draw.rect(self.screen, key.current_color, key)
-            # for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
-            #     pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height)))
         elif self.gamestate == 1:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
