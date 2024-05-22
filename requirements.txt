@@ -1,4 +1,4 @@
 pygame
 mido
 music
-pyserial
+pyserialpre-commit
