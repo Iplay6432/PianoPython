@@ -114,7 +114,7 @@ class PianoGame:
             keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1)
             keyboard.place_keyboard()
 
-        elif self.gamestate == 1:
+        elif self.gamestate == 2:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
             self.screen.fill(RASPBERRY)
