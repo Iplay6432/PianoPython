@@ -42,8 +42,8 @@ class PianoGame:
         return (self.width, self.height)
 
     def loop(self):
-        # left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
-        # left_arduino_process.start()
+        left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
+        left_arduino_process.start()
         # right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
         # right_arduino_process.start()
 
@@ -52,7 +52,7 @@ class PianoGame:
                 self.process_events(event)
             # self.screen.fill(Color.BLACK)
 
-            # self.process_arduino_events()
+            self.process_arduino_events()
 
             self.render_frame()
 
