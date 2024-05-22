@@ -43,7 +43,7 @@ class PianoGame:
             self.screen.fill(Color.BLACK)
 
             self.render_frame()
-            
+
             pygame.display.flip()
 
             self.dt = self.clock.tick(60) / 1000
@@ -61,7 +61,7 @@ class PianoGame:
             self.keys = []
             count = 0
             self.screen.fill(GREY)
-            for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys) 
+            for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
                 self.keys.append(
                     Key(
                         Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
@@ -71,9 +71,9 @@ class PianoGame:
                         (int(self.width)//key_count),
                         int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
                 )
-                
+
                 count+=1
-            
+
             for key in self.keys:
                 pygame.draw.rect(self.screen, key.current_color, key)
             for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
@@ -97,7 +97,7 @@ class PianoGame:
             text_rect_2 = twinkle.get_rect(center=(int(self.width/2), 100))
             pygame.draw.rect(self.screen,Color.WHITE,text_rect_2)
             self.screen.blit(twinkle,text_rect_2)
-            
+
             vivaldi = font.render(" Vivaldi ",True,Color.BLACK)
             text_rect_3 = vivaldi.get_rect(center=(int(self.width/2)+150, 100))
             pygame.draw.rect(self.screen,Color.WHITE,text_rect_3)
@@ -145,7 +145,7 @@ class PianoGame:
             self.falling.update()
         count = 0
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
-        for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys) 
+        for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys)
             self.keys.append(
                 Key(
                     Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
@@ -160,10 +160,10 @@ class PianoGame:
             pygame.draw.rect(self.screen, key.current_color, key)
         for val in range(0,int(self.width/1.2), 1+(int(int(self.width/1.2)/key_count))):
             pygame.draw.line(self.screen,Color.BLACK,(val,self.height - key_height),(val,int(self.height)))
-        
-        
-        
-        
+
+
+
+
 
 
 

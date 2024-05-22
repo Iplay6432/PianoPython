@@ -1,17 +1,17 @@
 import pygame
 from backend import Color, Note, enums
 from key import Key
-
+import serial
 class Keyboard:
-    def __init__(self, width, height, screen, notes):
+    def __init__(self, width, height, screen, notes, scalew, scaleh):
         self.RASPBERRY = (227,27,93)
         self.GREY = (200,200,200)
         self.height = height
         self.width = width
         self.screen = screen
         self.notes = notes
-        self.valuess = []
-
+        self.values = []
+        self.set = serial.Serial("COM4", 9600)
         pass
 
     def place_keyboard(self):
@@ -19,24 +19,34 @@ class Keyboard:
         self.keys = []
         count = 0
         self.screen.fill(self.GREY)
-        for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys) 
-            self.valuess.append(val)
+        noteobj = [Note.C, Note.Db, Note.D, Note.Eb, Note.E, Note.F, Note.Gb, Note.G, Note.Ab, Note.A, Note.Bb, Note.B, Note.C]
+        for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
+            self.values.append(val)
             self.keys.append(
                 Key(
                     Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
-                    Note.A,
+                    noteobj[count],
                     val,
                     0,
                     (int(self.width)//key_count),
                     int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
             )
-            
+
             count+=1
-        
+
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
         for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
             pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height)))
-        
-        return self.valuess
-    
+
+        return self.values
+    def get_played(self):
+        x = 0
+        bs = []
+        ds = []
+        for key in self.keys:
+            while x < 20:
+                bs.append(self.set.readline())
+            if (key.note+"1") in bs:
+                ds.append(key.note)
+        return ds

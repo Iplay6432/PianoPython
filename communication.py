@@ -5,7 +5,7 @@ import serial
 
 def main():
     PORT_BASE = "/dev/tty"
-    with serial.Serial() as ser:
+    with serial.Serial() as set:
         while True:
             pass
 

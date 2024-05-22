@@ -12,7 +12,7 @@ class Key(pygame.Rect):
         self.default_color = default_color
         self.current_color = self.default_color
         self.note: Note = note if isinstance(note, Note) else Note(note)
-    
+
     def press(self, change, on):
         if change:
             if on:
@@ -21,8 +21,7 @@ class Key(pygame.Rect):
             else:
                 self.active = False
                 self.current_color = (self.default_color)
-        
 
-    
-        
-    
+
+
+

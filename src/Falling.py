@@ -24,7 +24,7 @@ class Falling(pygame.Rect):
         self.executor = ThreadPoolExecutor(max_workers=10)
         with open(f"jsons/{songname}.json") as f:
             self.song = json.load(f)
- 
+
     def play_wav(self, wav_file, times):
         # Create a new thread that will play the sound
         thread = threading.Thread(target=self._play_wav, args=(wav_file, times))
@@ -41,20 +41,20 @@ class Falling(pygame.Rect):
         else:
             sound.play()
         # Play audio file
-        
-    def place_key(self): 
+
+    def place_key(self):
         key_count = len(self.notes)
         self.keys = []
         vals = self.vals
         note_names = list(Note.__members__.keys())
-    
+
         for note in self.song:
             duration_seconds = note[1] / 1000.0
             lens = duration_seconds * (self.speed * 60)
-        
+
             self.lengths.append(lens)
             no = ''.join([i for i in note[0] if not i.isdigit()])
-         
+
             no = note_names.index(no)
             no = vals[no]
 
@@ -85,7 +85,7 @@ class Falling(pygame.Rect):
                 # redraw key
                 pygame.draw.rect(self.screen, key.current_color, key)
                 pygame.draw.rect(self.screen, Color.BLUE, key, 1)
-                
+
                 if self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
                     pygame.draw.rect(self.screen, Color.YELLOW, key, 1)
@@ -97,5 +97,5 @@ class Falling(pygame.Rect):
             key = self.keys[i - d]
             if key.played:
                 self.keys.remove(key)
-                d +=1 
-                
+                d +=1
+
