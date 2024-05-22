@@ -106,7 +106,7 @@ class PianoGame:
     def stop_note(self, note: Note):
         playing = self.playing.get(note)
         if playing is not None:
-            playing.stop()
+            playing.join(timeout=.2)
 
 
     def render_frame(self):
