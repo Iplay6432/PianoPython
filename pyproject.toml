@@ -32,8 +32,6 @@ select = [
     "B",
     # flake8-comprehensions
     "C4",
-    # flake8-django
-    "DJ",
     # pycodestyle
     "E",
     # Pyflakes
@@ -42,6 +40,8 @@ select = [
     "I",
     # flake8-no-pep420
     "INP",
+    # pep8-naming
+    "N",
     # Pylint
     "PL",
     # pygrep hooks
