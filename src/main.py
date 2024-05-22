@@ -7,6 +7,7 @@ from Falling import Falling
 from communication import read_arduino
 import multiprocessing as mp
 import queue
+import threading
 from Keyboard import  Keyboard
 
 RASPBERRY = (227,27,93)
@@ -34,16 +35,17 @@ class PianoGame:
         self.notes = Note
         self.ranonce = False
         self.queue = queue.Queue()
+        self.playing: dict[Note, threading.Thread] = {}
 
     @property
     def shape(self) -> tuple[int, int]:
         return (self.width, self.height)
 
     def loop(self):
-        left_arduino_process = mp.Process(target=read_arduino, args=(self.queue, True))
+        left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
         left_arduino_process.start()
-        right_arduino_process = mp.Process(target=read_arduino, args=(self.queue, False))
-        right_arduino_process.start()
+        # right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
+        # right_arduino_process.start()
 
         while self.running:
             for event in pygame.event.get():
@@ -85,12 +87,32 @@ class PianoGame:
         for key, note in zip(keypress, notes):
             if key == "1":
                 self.play_note(note)
+            else:
+                self.stop_note(note)
+
+    def play_note(self, note: Note):
+        # Create a new thread that will play the sound
+        thread = threading.Thread(target=self._play_wav, args=(note))
+        # Start the new thread
+        thread.start()
+
+        self.playing[note] = thread
+
+        # Play audio file
+    def _play_note(self, note: Note) -> None:
+        sound = pygame.mixer.Sound(f"notes/{note}5.wav")
+        sound.play()
+
+    def stop_note(self, note: Note):
+        playing = self.playing.get(note)
+        if playing is not None:
+            playing.stop()
 
 
     def render_frame(self):
         if self.gamestate==2: #FREEPLAY
             keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1).place_keyboard()
-            keyboard.get_played()
+
 
 
             # key_count = len(self.notes)
