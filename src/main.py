@@ -2,10 +2,12 @@ import os
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 from backend import Note, Color #,SONGS
-import serial
 from key import Key
-from Falling import Falling
-import time
+from falling import Falling
+from communication import read_arduino
+import multiprocessing as mp
+import queue
+import contextlib
 
 RASPBERRY = (227,27,93)
 GREY = (200,200,200)
@@ -31,16 +33,24 @@ class PianoGame:
 
         self.notes = Note
         self.ranonce = False
+        self.queue = queue.Queue()
 
     @property
     def shape(self) -> tuple[int, int]:
         return (self.width, self.height)
 
     def loop(self):
+        left_arduino_process = mp.Process(target=read_arduino, args=(self.queue, True))
+        left_arduino_process.start()
+        right_arduino_process = mp.Process(target=read_arduino, args=(self.queue, False))
+        right_arduino_process.start()
+
         while self.running:
             for event in pygame.event.get():
                 self.process_events(event)
             self.screen.fill(Color.BLACK)
+
+            self.process_arduino_events()
 
             self.render_frame()
 
@@ -54,6 +64,28 @@ class PianoGame:
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame.QUIT:
             self.running = False
+
+    def process_arduino_events(self) -> None:
+        for _ in range(2):
+            self.process_keypress()
+
+    def process_keypress(self) -> None:
+        try:
+            keypress_dict: dict[bool, str] = self.queue.get_nowait()
+        except queue.Empty:
+            return
+
+        if True in keypress_dict:  # right side of keyboard
+            keypress = keypress_dict[True]
+            notes = tuple(Note)[6:]
+        else:  # left side of keyboard
+            keypress = keypress_dict[False]
+            notes = tuple(Note)[:6]
+
+        for key, note in zip(keypress, notes):
+            if key == "1":
+                self.play_note(note)
+
 
     def render_frame(self):
         if self.gamestate==2: #FREEPLAY
