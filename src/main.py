@@ -52,7 +52,7 @@ class PianoGame:
                 self.process_events(event)
             self.screen.fill(Color.BLACK)
 
-            self.process_arduino_events()
+            # self.process_arduino_events()
 
             self.render_frame()
 
@@ -67,9 +67,9 @@ class PianoGame:
         if event.type == pygame.QUIT:
             self.running = False
 
-    # def process_arduino_events(self) -> None:
-    #     for _ in range(2):
-    #         self.process_keypress()
+    def process_arduino_events(self) -> None:
+        for _ in range(2):
+            self.process_keypress()
 
     def process_keypress(self) -> None:
         try:
