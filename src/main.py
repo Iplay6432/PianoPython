@@ -7,7 +7,7 @@ from falling import Falling
 from communication import read_arduino
 import multiprocessing as mp
 import queue
-import contextlib
+from Keyboard import  Keyboard
 
 RASPBERRY = (227,27,93)
 GREY = (200,200,200)
@@ -16,7 +16,7 @@ class PianoGame:
     def __init__(self) -> None:
         pygame.init()
         pygame.mixer.init()
-        self.gamestate = 1
+        self.gamestate = 2
         #Gamestate vals:
             #   0 = Main screen
             #   1 = Autoplay keyboard
@@ -89,27 +89,31 @@ class PianoGame:
 
     def render_frame(self):
         if self.gamestate==2: #FREEPLAY
-            key_count = len(self.notes)
-            self.keys = []
-            count = 0
-            self.screen.fill(GREY)
-            for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
-                self.keys.append(
-                    Key(
-                        Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
-                        Note.A,
-                        val,
-                        0,
-                        (int(self.width)//key_count),
-                        int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
-                )
+            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1).place_keyboard()
+            keyboard.get_played()
 
-                count+=1
 
-            for key in self.keys:
-                pygame.draw.rect(self.screen, key.current_color, key)
-            for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
-                pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height)))
+            # key_count = len(self.notes)
+            # self.keys = []
+            # count = 0
+            # self.screen.fill(GREY)
+            # for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
+            #     self.keys.append(
+            #         Key(
+            #             Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
+            #             Note.A,
+            #             val,
+            #             0,
+            #             (int(self.width)//key_count),
+            #             int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
+            #     )
+
+            #     count+=1
+
+            # for key in self.keys:
+            #     pygame.draw.rect(self.screen, key.current_color, key)
+            # for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
+            #     pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height)))
         elif self.gamestate == 1:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
