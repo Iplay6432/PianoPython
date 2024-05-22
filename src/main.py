@@ -42,8 +42,8 @@ class PianoGame:
         return (self.width, self.height)
 
     def loop(self):
-        left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
-        left_arduino_process.start()
+        # left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
+        # left_arduino_process.start()
         # right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
         # right_arduino_process.start()
 
@@ -67,9 +67,9 @@ class PianoGame:
         if event.type == pygame.QUIT:
             self.running = False
 
-    def process_arduino_events(self) -> None:
-        for _ in range(2):
-            self.process_keypress()
+    # def process_arduino_events(self) -> None:
+    #     for _ in range(2):
+    #         self.process_keypress()
 
     def process_keypress(self) -> None:
         try:
