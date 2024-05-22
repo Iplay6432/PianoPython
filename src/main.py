@@ -50,7 +50,7 @@ class PianoGame:
         while self.running:
             for event in pygame.event.get():
                 self.process_events(event)
-            self.screen.fill(Color.BLACK)
+            # self.screen.fill(Color.BLACK)
 
             # self.process_arduino_events()
 
