@@ -92,7 +92,7 @@ class PianoGame:
 
     def play_note(self, note: Note):
         # Create a new thread that will play the sound
-        thread = threading.Thread(target=self._play_wav, args=(note))
+        thread = threading.Thread(target=self._play_note, args=(note))
         # Start the new thread
         thread.start()
 
@@ -110,7 +110,7 @@ class PianoGame:
 
 
     def render_frame(self):
-        if self.gamestate==2: #FREEPLAY
+        if self.gamestate==1: #FREEPLAY
             keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1)
             keyboard.place_keyboard()
 
