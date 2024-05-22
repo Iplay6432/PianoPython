@@ -79,7 +79,7 @@ class PianoGame:
 
         if True in keypress_dict:  # right side of keyboard
             keypress = keypress_dict[True]
-            notes = tuple(Note)[6:]
+            notes = tuple(Note)[6:-1]
         else:  # left side of keyboard
             keypress = keypress_dict[False]
             notes = tuple(Note)[:6]
@@ -92,7 +92,7 @@ class PianoGame:
 
     def play_note(self, note: Note):
         # Create a new thread that will play the sound
-        thread = threading.Thread(target=self._play_note, args=(note))
+        thread = threading.Thread(target=self._play_note, args=(note,))
         # Start the new thread
         thread.start()
 
