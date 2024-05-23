@@ -1,11 +1,11 @@
 import os
+import sys
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 from backend import Note, Color #,SONGS
 from key import Key
 from Falling import Falling
 from communication import read_arduino
-import multiprocessing as mp
 import queue
 import threading
 from Keyboard import  Keyboard
@@ -23,7 +23,7 @@ class PianoGame:
             #   1 = Autoplay keyboard
             #   2 = Freeplay keyboard
 
-        self.height, self.width = (480.0, 800.0)
+        self.height, self.width = (480, 800)
         self.vals = []
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
@@ -42,23 +42,19 @@ class PianoGame:
         return (self.width, self.height)
 
     def loop(self):
-        try:
+        if "--pi" in sys.argv:
             left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
             left_arduino_process.start()
-        except:
-            pass
-        # right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
-        # right_arduino_process.start()
+            right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
+            right_arduino_process.start()
 
         while self.running:
             for event in pygame.event.get():
                 self.process_events(event)
             # self.screen.fill(Color.BLACK)
 
-            try:
+            if "--pi" in sys.argv:
                 self.process_arduino_events()
-            except:
-                pass
 
             self.render_frame()
 
