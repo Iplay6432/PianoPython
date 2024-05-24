@@ -26,8 +26,7 @@ class PianoGame:
 
         self.height, self.width = (480, 800)
         self.vals = []
-        print(platform.machine())
-        if platform.machine() == "arm7l":
+        if platform.machine() == "aarch64":
             self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         else:
             self.screen = pygame.display.set_mode((self.width, self.height))
