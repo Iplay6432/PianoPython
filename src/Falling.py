@@ -110,7 +110,6 @@ class Falling(pygame.Rect):
                 if self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
                     pygame.draw.rect(self.screen, Color.YELLOW, key, 1)
-                    print("playing")
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
                         self.playedkeys.append(key)
