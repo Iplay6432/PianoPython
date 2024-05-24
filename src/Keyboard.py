@@ -15,6 +15,7 @@ class Keyboard:
         self.notes = notes
         self.values = []
         self.location = location
+        self.keys = []
 
     def place_keyboard(self):
         key_count = len(self.notes)
@@ -34,6 +35,7 @@ class Keyboard:
                     int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height - self.location)//2)+75)
             )
             count+=1
+
         for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
             pygame.draw.line(self.screen,Color.BLACK,(val,self.location),(val,int(self.height)))
 
