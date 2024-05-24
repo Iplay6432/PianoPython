@@ -202,6 +202,7 @@ class PianoGame:
             print(self.plays)
             self.falling.update()
             self.falling.update_text()
+            keyboard.place_keyboard()
 
         count = 0
 
