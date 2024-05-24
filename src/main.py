@@ -49,8 +49,8 @@ class PianoGame:
         if "--pi" in sys.argv:
             left_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, True))
             left_arduino_process.start()
-            right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
-            right_arduino_process.start()
+            # right_arduino_process = threading.Thread(target=read_arduino, args=(self.queue, False))
+            # right_arduino_process.start()
 
         while self.running:
             for event in pygame.event.get():
@@ -98,7 +98,7 @@ class PianoGame:
 
     def play_note(self, note: Note):
         # Create a new thread that will play the sound
-        thread = threading.Thread(target=self._play_note, args=(note))
+        thread = threading.Thread(target=self._play_note, args=(note,))
         # Start the new thread
         thread.start()
 
@@ -106,13 +106,14 @@ class PianoGame:
 
         # Play audio file
     def _play_note(self, note: Note) -> None:
-        sound = pygame.mixer.Sound(f"notes/{note.value}5.wav")
-        self.plays.append(note.value)
-        sound.play()
+        if note.value not in self.plays:
+            sound = pygame.mixer.Sound(f"notes/{note.value}5.wav")
+            self.plays.append(note.value)
+            sound.play()
 
     def stop_note(self, note: Note):
         playing = self.playing.get(note)
-        if playing is not None:
+        if playing is not None and note.value in self.plays:
             playing.join(timeout=.2)
             self.plays.remove(note.value)
 
@@ -179,6 +180,8 @@ class PianoGame:
         self.screen.fill(GREY)
         key_height = int(self.height/2)
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
+
+
         keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.plays, self.height - key_height)
         keyboard.place_keyboard()
 
@@ -186,30 +189,20 @@ class PianoGame:
             valss.append(val)
             count += 1
         if self.ranonce == False:
-            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, "rushe",valss, self.plays)
+            song = "rushe"
+            for idx, arg in enumerate(sys.argv):
+                if "--song" in arg:
+                    if "=" not in arg:
+                        song = sys.argv[idx+1]
+                    else:
+                        song = arg.removeprefix("--song=")
+            self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, song, valss, self.plays)
             self.falling.place_key()
             self.ranonce = True
         else:
             self.falling.update()
             self.falling.update_text()
         count = 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def main():
