@@ -48,7 +48,7 @@ class Keyboard:
         return self.values
     def change_color(self):
         for key in self.keys:
-            if key in self.is_playing:
+            if key.note.value in self.is_playing:
                 key.press(True, True)
             else:
                 key.press(True, False)
