@@ -180,8 +180,7 @@ class PianoGame:
         self.screen.fill(GREY)
         key_height = int(self.height/2)
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
-
-
+        keyboard.change_color(self.plays)
         keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.height - key_height)
         keyboard.place_keyboard()
 
@@ -203,7 +202,7 @@ class PianoGame:
             print(self.plays)
             self.falling.update()
             self.falling.update_text()
-            keyboard.change_color(self.plays)
+
         count = 0
 
 

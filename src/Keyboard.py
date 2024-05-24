@@ -22,7 +22,7 @@ class Keyboard:
         self.keys = []
         count = 0
         self.screen.fill(self.GREY)
-        noteobj = [Note.C, Note.Db, Note.D, Note.Eb, Note.E, Note.F, Note.Gb, Note.G, Note.Ab, Note.A, Note.Bb, Note.B, Note.C]
+        noteobj = list(Note)+[Note.C]
         for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
             self.values.append(val)
             self.keys.append(
@@ -49,8 +49,8 @@ class Keyboard:
     def change_color(self, plays):
         self.plays = plays
         for key in self.keys:
+            print(key.note.value)
             if key.note.value in plays:
                 key.press(True, True)
-                print("changing color")
             else:
                 key.press(True, False)
