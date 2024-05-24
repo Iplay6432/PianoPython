@@ -9,6 +9,7 @@ import multiprocessing as mp
 import queue
 import threading
 from Keyboard import  Keyboard
+import platform
 
 RASPBERRY = (227,27,93)
 GREY = (200,200,200)
@@ -25,7 +26,11 @@ class PianoGame:
 
         self.height, self.width = (480.0, 800.0)
         self.vals = []
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        print(platform.machine())
+        if platform.machine() == "arm7l":
+            self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
         self.running = True
 
@@ -98,7 +103,7 @@ class PianoGame:
 
     def play_note(self, note: Note):
         # Create a new thread that will play the sound
-        thread = threading.Thread(target=self._play_note, args=(note,))
+        thread = threading.Thread(target=self._play_note, args=(note))
         # Start the new thread
         thread.start()
 
@@ -118,11 +123,11 @@ class PianoGame:
 
 
     def render_frame(self):
-        if self.gamestate==1: #FREEPLAY
-            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1)
+        if self.gamestate==2: #FREEPLAY
+            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1, self.plays, 0)
             keyboard.place_keyboard()
 
-        elif self.gamestate == 2:
+        elif self.gamestate == 1:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
             self.screen.fill(RASPBERRY)
@@ -190,21 +195,8 @@ class PianoGame:
             self.falling.update_text()
         count = 0
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
-        for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)): # Need to add function to move certain keys up and down(black keys)
-            self.keys.append(
-                Key(
-                    Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
-                    Note.A,
-                    val,
-                    self.height - key_height,
-                    ((int(self.width/1.2))//key_count),
-                    (int(self.height - key_height) if count in {0,2,4,5,7,9,11,12} else (int(self.height - key_height)//2.5)+75) )
-            )
-            count+=1
-        for key in self.keys:
-            pygame.draw.rect(self.screen, key.current_color, key)
-        for val in range(0,int(self.width/1.2), 1+(int(int(self.width/1.2)/key_count))):
-            pygame.draw.line(self.screen,Color.BLACK,(val,self.height - key_height),(val,int(self.height)))
+        keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.plays, self.height - key_height)
+        keyboard.place_keyboard()
 
 
 

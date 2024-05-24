@@ -5,14 +5,17 @@ import serial
 import time
 import threading
 class Keyboard:
-    def __init__(self, width, height, screen, notes, scalew, scaleh):
+    def __init__(self, width, height, screen, notes, scalew, scaleh, playing, location):
         self.RASPBERRY = (227,27,93)
         self.GREY = (200,200,200)
         self.height = height/scaleh
         self.width = width/scalew
+        self.scaleh = scaleh
         self.screen = screen
         self.notes = notes
         self.values = []
+        self.is_playing = playing
+        self.location = location
 
     def place_keyboard(self):
         key_count = len(self.notes)
@@ -27,15 +30,19 @@ class Keyboard:
                     Color.WHITE if count in {0,2,4,5,7,9,11,12} else Color.BLACK,
                     noteobj[count],
                     val,
-                    0,
+                    self.location,
                     (int(self.width)//key_count),
-                    int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height)//2)+75)
+                    int(self.height) if count in {0,2,4,5,7,9,11,12} else (int(self.height - self.location)//2)+75)
             )
             count+=1
 
         for key in self.keys:
             pygame.draw.rect(self.screen, key.current_color, key)
+            if key in self.is_playing:
+                key.press(True, True)
+            else:
+                key.press(True, False)
         for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
-            pygame.draw.line(self.screen,Color.BLACK,(val,0),(val,int(self.height)))
+            pygame.draw.line(self.screen,Color.BLACK,(val,self.location),(val,int(self.height)))
 
         return self.values
