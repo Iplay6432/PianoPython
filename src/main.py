@@ -196,11 +196,11 @@ class PianoGame:
                         song = sys.argv[idx+1]
                     else:
                         song = arg.removeprefix("--song=")
-            print(self.plays)
             self.falling = Falling(1,self.screen,self.height,self.width, 0,100, self.notes, song, valss, self.plays)
             self.falling.place_key()
             self.ranonce = True
         else:
+            print(self.plays)
             self.falling.update()
             self.falling.update_text()
         count = 0
