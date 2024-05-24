@@ -203,7 +203,7 @@ class PianoGame:
             print(self.plays)
             self.falling.update()
             self.falling.update_text()
-            keyboard.change_color()
+            keyboard.change_color(self.plays)
         count = 0
 
 
