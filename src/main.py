@@ -182,7 +182,7 @@ class PianoGame:
         pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
 
 
-        keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.plays, self.height - key_height)
+        keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.height - key_height)
         keyboard.place_keyboard()
 
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)):

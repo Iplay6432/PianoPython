@@ -5,7 +5,7 @@ import serial
 import time
 import threading
 class Keyboard:
-    def __init__(self, width, height, screen, notes, scalew, scaleh, playing, location):
+    def __init__(self, width, height, screen, notes, scalew, scaleh, location):
         self.RASPBERRY = (227,27,93)
         self.GREY = (200,200,200)
         self.height = height/scaleh
@@ -51,5 +51,6 @@ class Keyboard:
         for key in self.keys:
             if key.note.value in plays:
                 key.press(True, True)
+                print("changing color")
             else:
                 key.press(True, False)
