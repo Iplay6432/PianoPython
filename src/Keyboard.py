@@ -46,3 +46,9 @@ class Keyboard:
             pygame.draw.line(self.screen,Color.BLACK,(val,self.location),(val,int(self.height)))
 
         return self.values
+    def change_color(self):
+        for key in self.keys:
+            if key in self.is_playing:
+                key.press(True, True)
+            else:
+                key.press(True, False)
