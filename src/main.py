@@ -76,15 +76,6 @@ class PianoGame:
     def process_arduino_events(self) -> None:
         for _ in range(2):
             self.process_keypress()
-        self.update_key_color()
-
-    def update_key_color(self):
-        for note in self.playing:
-            self.keys
-            if key.value in self.playing:
-                key.current_color = Color.RASPBERRY
-            else:
-                key.current_color = key.default_color
 
     def process_keypress(self) -> None:
         try:
