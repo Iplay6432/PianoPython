@@ -108,7 +108,8 @@ class PianoGame:
     def _play_note(self, note: Note) -> None:
         if note.value not in self.plays:
             sound = pygame.mixer.Sound(f"notes/{note.value}5.wav")
-            self.plays.append(note.value)
+            while note.value not in self.plays:
+                self.plays.append(note.value)
             sound.play()
 
     def stop_note(self, note: Note):
@@ -179,9 +180,8 @@ class PianoGame:
         count = 0
         self.screen.fill(GREY)
         key_height = int(self.height/2)
-        pygame.draw.rect(self.screen, GREY, (0, int(self.height//2), int(self.width), int(self.height//2)))
+
         keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.height - key_height)
-        keyboard.change_color(self.plays)
 
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)):
             valss.append(val)
@@ -198,10 +198,10 @@ class PianoGame:
             self.falling.place_key()
             self.ranonce = True
         else:
-            print(self.plays)
             self.falling.update()
+            keyboard.place_keyboard(self.plays)
             self.falling.update_text()
-            keyboard.place_keyboard()
+
 
         count = 0
 

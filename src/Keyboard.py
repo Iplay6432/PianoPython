@@ -17,11 +17,13 @@ class Keyboard:
         self.location = location
         self.keys = []
 
-    def place_keyboard(self):
+    def place_keyboard(self,plays):
+
         key_count = len(self.notes)
         self.keys = []
         count = 0
         self.screen.fill(self.GREY)
+        GREY = (200,200,200)
         noteobj = list(Note)+[Note.C]
         for val in range(0,int(self.width), 1+(int(self.width)//key_count)): # Need to add function to move certain keys up and down(black keys)
             self.values.append(val)
@@ -36,16 +38,12 @@ class Keyboard:
             )
             count+=1
         for key in self.keys:
-            pygame.draw.rect(self.screen, key.current_color, key)
-        for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
-            pygame.draw.line(self.screen,Color.BLACK,(val,self.location),(val,int(self.height)))
-
-        return self.values
-    def change_color(self, plays):
-        self.plays = plays
-        for key in self.keys:
-            print(key.note.value)
             if key.note.value in plays:
                 key.press(True, True)
             else:
                 key.press(True, False)
+        for key in self.keys:
+            pygame.draw.rect(self.screen, key.current_color, key)
+        for val in range(0,int(self.width), 1+(int(self.width)//key_count)):
+            pygame.draw.line(self.screen,Color.BLACK,(val,self.location),(val,int(self.height)))
+        return self.values
