@@ -72,8 +72,9 @@ class Falling(pygame.Rect):
             )
 
         for key in self.keys:
-            pygame.draw.rect(self.screen, key.current_color, key)
-            pygame.draw.rect(self.screen, Color.BLUE, key, 1)
+            if key.y + key.width > 220:
+                pygame.draw.rect(self.screen, key.current_color, key)
+                pygame.draw.rect(self.screen, Color.BLUE, key, 1)
             key.played = False
             key.correct = False
         self.start_time = time.time()
@@ -121,7 +122,7 @@ class Falling(pygame.Rect):
                                 key.correct = True
 
             # redraw key
-            if key.y <= 220:
+            if key.y + key.width <= 220:
                 print(f"{key}={key.y}")
                 pygame.draw.rect(self.screen, key.current_color, key)
                 pygame.draw.rect(self.screen, Color.BLUE, key, 1)
