@@ -103,9 +103,6 @@ class Falling(pygame.Rect):
                 # update y-coordinate
                 key.y += self.speed  # adjust this value to change the speed of falling
 
-                # redraw key
-                pygame.draw.rect(self.screen, key.current_color, key)
-                pygame.draw.rect(self.screen, Color.BLUE, key, 1)
 
                 if self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
@@ -122,7 +119,15 @@ class Falling(pygame.Rect):
                         else:
                             if note[0]+note[1] in self.plays:
                                 key.correct = True
+
+            # redraw key
+            if key.y <= 220:
+                print(f"{key}={key.y}")
+                pygame.draw.rect(self.screen, key.current_color, key)
+                pygame.draw.rect(self.screen, Color.BLUE, key, 1)
+
         d = 0
+
         # for key in self.keys:
         #     key = self.keys[i - d]
         #     if key.played:

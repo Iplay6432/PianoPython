@@ -198,8 +198,8 @@ class PianoGame:
             self.falling.place_key()
             self.ranonce = True
         else:
-            self.falling.update()
             keyboard.place_keyboard(self.plays)
+            self.falling.update()
             self.falling.update_text()
 
 
@@ -207,8 +207,11 @@ class PianoGame:
 
 
 def main():
-    piano = PianoGame()
-    piano.loop()
+    try:
+        piano = PianoGame()
+        piano.loop()
+    except KeyboardInterrupt:
+        os._exit(0)
 
 
 if __name__ == "__main__":
