@@ -2,11 +2,11 @@
 #define MAX_PINS 7
 #define START_PIN 2
 
-bool pinsActive[MAX_PINS] = {
-  false,
-  false,
-  false,
-  false,
+const bool pinsActive[MAX_PINS] = {
+  true,
+  true,
+  true,
+  true,
   true,
   false,
   false,
