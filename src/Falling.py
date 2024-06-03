@@ -123,7 +123,6 @@ class Falling(pygame.Rect):
 
             # redraw key
             if key.y + key.width <= 220:
-                print(f"{key}={key.y}")
                 pygame.draw.rect(self.screen, key.current_color, key)
                 pygame.draw.rect(self.screen, Color.BLUE, key, 1)
 
