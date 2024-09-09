@@ -120,7 +120,7 @@ class PianoGame:
 
 
     def render_frame(self):
-        if self.gamestate==0: #FREEPLAY
+        if self.gamestate==2: #FREEPLAY
             keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1, self.plays, 0)
             keyboard.place_keyboard()
 
