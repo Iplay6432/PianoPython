@@ -107,7 +107,6 @@ class Falling(pygame.Rect):
 
                 if self.height /2 > key.y > self.height/2 - self.lengths[i]:
                     key.current_color = Color.RED
-                    pygame.draw.rect(self.screen, Color.YELLOW, key, 1)
                     if not hasattr(key, 'played') or not key.played:
                         key.played = True
                         self.playedkeys.append(key)
@@ -122,9 +121,17 @@ class Falling(pygame.Rect):
                                 key.correct = True
 
             # redraw key
-            if key.y + key.width <= 220:
-                pygame.draw.rect(self.screen, key.current_color, key)
-                pygame.draw.rect(self.screen, Color.BLUE, key, 1)
+            if key.y + self.lengths[i] <= self.width/2 and key.y < self.height/2:
+                lens = 0
+                if key.y + self.lengths[i] > self.height/2:
+                    self.lengths[i] = self.lengths[i] - self.speed
+                    lens = self.lengths[i]
+                else:
+                    lens = self.lengths[i]
+                key_rect = pygame.Rect(key.x, key.y, key.width, lens)
+                pygame.draw.rect(self.screen, key.current_color, key_rect)
+                pygame.draw.rect(self.screen, Color.BLUE, key_rect, 1)
+
 
         d = 0
 

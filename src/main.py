@@ -120,7 +120,7 @@ class PianoGame:
 
 
     def render_frame(self):
-        if self.gamestate==2: #FREEPLAY
+        if self.gamestate==0: #FREEPLAY
             keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1, self.plays, 0)
             keyboard.place_keyboard()
 
@@ -182,12 +182,14 @@ class PianoGame:
         key_height = int(self.height/2)
 
         keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1.2, 1, self.height - key_height)
+        keyboard.place_keyboard(self.plays)
 
         for val in range(0,int(self.width/1.2), 1+(int(self.width/1.2)//key_count)):
             valss.append(val)
             count += 1
-        if self.ranonce == False:
-            song = "rushe"
+        if not self.ranonce:
+
+            song = "give"
             for idx, arg in enumerate(sys.argv):
                 if "--song" in arg:
                     if "=" not in arg:

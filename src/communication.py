@@ -15,14 +15,19 @@ def read_arduino(queue, left_half: bool = True):
                     print(b)
                     continue
 
-                if len(line) != 7:
+                if len(line) != 8:
                     print(line)
                     continue
-                for c1, c2 in zip(line, previous_str):
+                for c1, c2 in zip(line[:-1], previous_str):
                     if c1 != c2:
                         previous_str = line
                         break
                 else:
                     continue
+
+                if line[-1] == "1":
+                    line = ["0" for _ in range(len(line)-1)]
+                else:
+                    line = line[:-1]
 
                 queue.put({left_half: line})

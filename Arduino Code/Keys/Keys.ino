@@ -18,11 +18,12 @@ void setup() {
     if (pinsActive[i-START_PIN])
       pinMode(i, INPUT);
   }
+  pinMode(MAX_PINS+1, INPUT);
 }
 
 void loop() {
-  char output[MAX_PINS];
-  output[MAX_PINS-1] = '\0';
+  char output[MAX_PINS+1];
+  output[MAX_PINS] = '\0';
   for (int i=START_PIN; i < MAX_PINS+START_PIN; i++) {
     const int index = i-START_PIN;
     if (pinsActive[index] && digitalRead(i) == HIGH) {
@@ -31,5 +32,6 @@ void loop() {
       output[index] = '0';
     }
   }
+  output[MAX_PINS-1] = digitalRead(MAX_PINS+1) == HIGH ? '1' : '0';
   Serial.println(output);
 }
