@@ -3,13 +3,15 @@ import sys
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 from backend import Note, Color #,SONGS
+from backend.NotesByKeyStrokes import NotesByKeyStrokes
+from backend.Button import Button
 from key import Key
 from Falling import Falling
 from communication import read_arduino
 import queue
 import threading
-from Keyboard import  Keyboard
 import platform
+from Keyboard import Keyboard
 
 RASPBERRY = (227,27,93)
 GREY = (200,200,200)
@@ -18,7 +20,7 @@ class PianoGame:
     def __init__(self) -> None:
         pygame.init()
         pygame.mixer.init()
-        self.gamestate = 1
+        self.gamestate = 0
         #Gamestate vals:
             #   0 = Main screen
             #   1 = Autoplay keyboard
@@ -59,6 +61,8 @@ class PianoGame:
 
             if "--pi" in sys.argv:
                 self.process_arduino_events()
+            else:
+                self.process_keyboard_events()
 
             self.render_frame()
 
@@ -68,7 +72,17 @@ class PianoGame:
             self.time += self.dt
 
         pygame.quit()
-
+    def process_keyboard_events(self) -> None:
+        k = NotesByKeyStrokes()
+        on = k.playing()
+        i=0
+        notes = tuple(Note)
+        for keyOn,note in zip(on,notes):
+            if keyOn == 1:
+                self.play_note(note)
+            else:
+                self.stop_note(note)
+            i+=1
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame.QUIT:
             self.running = False
@@ -118,62 +132,96 @@ class PianoGame:
             playing.join(timeout=.2)
             self.plays.remove(note.value)
 
-
     def render_frame(self):
         if self.gamestate==2: #FREEPLAY
-            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1, self.plays, 0)
-            keyboard.place_keyboard()
+            keyboard= Keyboard(self.width, self.height, self.screen, self.notes, 1, 1, 0)
+            keyboard.place_keyboard(self.plays)
 
         elif self.gamestate == 1:
             self.Learning()
         elif self.gamestate == 0: #MAIN START SCREEN
             self.screen.fill(RASPBERRY)
+            # Initialize font
+            font_large = pygame.font.Font('freesansbold.ttf', 60)
+            font_small = pygame.font.Font('freesansbold.ttf', 25)
 
-            #Render "Raspberry Pi-ano" text
-            font = pygame.font.Font('freesansbold.ttf', 60)
-            title_screen = font.render("Raspberry Pi-ano",True,Color.WHITE)
-            text_rect_1 = title_screen.get_rect(center=(int(self.width/2), 200))
-            self.screen.blit(title_screen,text_rect_1)
+            # Render "Raspberry Pi-ano" text
+            title_screen = font_large.render("Raspberry Pi-ano", True, Color.WHITE)
+            text_rect_1 = title_screen.get_rect(center=(int(self.width / 2), 200))
+            self.screen.blit(title_screen, text_rect_1)
 
+            # Create buttons
+            buttons = [
+                Button("Twinkle", font_small, Color.BLACK, int(self.width / 2) - 75, 100, 150, 50, "under"),
+                Button("Vivaldi", font_small, Color.BLACK, int(self.width / 2) + 75, 100, 150, 50, "give"),
+                Button("Fur elise", font_small, Color.BLACK, int(self.width / 2) + 225, 100, 150, 50, "doom"),
+                Button("Birthday", font_small, Color.BLACK, int(self.width / 2) - 225, 100, 150, 50,"Lamb"),
+                Button("Ode Joy", font_small, Color.BLACK, int(self.width / 2) - 375, 100, 150, 50, "rushe"),
+                Button("FreePlay", font_small, Color.BLACK, self.width - 165, self.height - 65, 150, 50, None)
+            ]
 
-            #Buttons
-            font = pygame.font.Font('freesansbold.ttf', 25)
+            # Draw buttons
+            for button in buttons:
+                button.draw(self.screen)
 
-            twinkle = font.render(" Twinkle ",True,Color.BLACK)
-            text_rect_2 = twinkle.get_rect(center=(int(self.width/2), 100))
-            pygame.draw.rect(self.screen,Color.WHITE,text_rect_2)
-            self.screen.blit(twinkle,text_rect_2)
-
-            vivaldi = font.render(" Vivaldi ",True,Color.BLACK)
-            text_rect_3 = vivaldi.get_rect(center=(int(self.width/2)+150, 100))
-            pygame.draw.rect(self.screen,Color.WHITE,text_rect_3)
-            self.screen.blit(vivaldi,text_rect_3)
-
-            fur = font.render(" Fur elise ",True,Color.BLACK)
-            text_rect_4 = fur.get_rect(center=(int(self.width/2)+300, 100))
-            pygame.draw.rect(self.screen,Color.WHITE,text_rect_4)
-            self.screen.blit(fur,text_rect_4)
-
-            birthday = font.render(" Birthday ",True,Color.BLACK)
-            text_rect_5 = fur.get_rect(center=(int(self.width/2)-150, 100))
-            pygame.draw.rect(self.screen,Color.WHITE,text_rect_5)
-            self.screen.blit(birthday,text_rect_5)
-
-            ode = font.render(" Ode Joy ",True,Color.BLACK)
-            text_rect_6 = fur.get_rect(center=(int(self.width/2)-300, 100))
-            pygame.draw.rect(self.screen,Color.WHITE,text_rect_6)
-            self.screen.blit(ode,text_rect_6)
-
-            fp = font.render(" FreePlay ",True,Color.BLACK)
-            text_rect_7 = fur.get_rect(bottom=self.height-15,right=self.width-15)
-            pygame.draw.rect(self.screen,Color.WHITE,text_rect_7)
-            self.screen.blit(fp,text_rect_7)
-
+            # Handle button clicks
+            for event in pygame.event.get():
+                for button in buttons:
+                    if button.is_clicked(event):
+                        print(f"{button.text} button clicked")
+                        if button.midi != None:
+                            self.gamestate = 1
+                            self.Learning(str(button.midi))
+                        else:
+                            self.gamestate = 2
             img = pygame.image.load("piano.png")
-            size =200
-            img = pygame.transform.scale(img, (size,size))
+            size = 200
+            img = pygame.transform.scale(img, (size, size))
+            # #Render "Raspberry Pi-ano" text
+            # font = pygame.font.Font('freesansbold.ttf', 60)
+            # title_screen = font.render("Raspberry Pi-ano",True,Color.WHITE)
+            # text_rect_1 = title_screen.get_rect(center=(int(self.width/2), 200))
+            # self.screen.blit(title_screen,text_rect_1)
+
+
+            # #Buttons
+            # font = pygame.font.Font('freesansbold.ttf', 25)
+
+            # twinkle = font.render(" Twinkle ",True,Color.BLACK)
+            # text_rect_2 = twinkle.get_rect(center=(int(self.width/2), 100))
+            # pygame.draw.rect(self.screen,Color.WHITE,text_rect_2)
+            # self.screen.blit(twinkle,text_rect_2)
+
+            # vivaldi = font.render(" Vivaldi ",True,Color.BLACK)
+            # text_rect_3 = vivaldi.get_rect(center=(int(self.width/2)+150, 100))
+            # pygame.draw.rect(self.screen,Color.WHITE,text_rect_3)
+            # self.screen.blit(vivaldi,text_rect_3)
+
+            # fur = font.render(" Fur elise ",True,Color.BLACK)
+            # text_rect_4 = fur.get_rect(center=(int(self.width/2)+300, 100))
+            # pygame.draw.rect(self.screen,Color.WHITE,text_rect_4)
+            # self.screen.blit(fur,text_rect_4)
+
+            # birthday = font.render(" Birthday ",True,Color.BLACK)
+            # text_rect_5 = fur.get_rect(center=(int(self.width/2)-150, 100))
+            # pygame.draw.rect(self.screen,Color.WHITE,text_rect_5)
+            # self.screen.blit(birthday,text_rect_5)
+
+            # ode = font.render(" Ode Joy ",True,Color.BLACK)
+            # text_rect_6 = fur.get_rect(center=(int(self.width/2)-300, 100))
+            # pygame.draw.rect(self.screen,Color.WHITE,text_rect_6)
+            # self.screen.blit(ode,text_rect_6)
+
+            # fp = font.render(" FreePlay ",True,Color.BLACK)
+            # text_rect_7 = fur.get_rect(bottom=self.height-15,right=self.width-15)
+            # pygame.draw.rect(self.screen,Color.WHITE,text_rect_7)
+            # self.screen.blit(fp,text_rect_7)
+
+            # img = pygame.image.load("piano.png")
+            # size =200
+            # img = pygame.transform.scale(img, (size,size))
             self.screen.blit(img,((self.width//2)-(size//2),(self.height//2)))
-    def Learning(self):
+    def Learning(self, song = "give"):
         key_count = len(self.notes)
         self.keys = []
         valss = []
@@ -188,8 +236,6 @@ class PianoGame:
             valss.append(val)
             count += 1
         if not self.ranonce:
-
-            song = "give"
             for idx, arg in enumerate(sys.argv):
                 if "--song" in arg:
                     if "=" not in arg:

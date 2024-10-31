@@ -3,3 +3,4 @@ mido
 music
 pyserial
 pre-commit
+keyboard

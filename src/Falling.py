@@ -23,6 +23,8 @@ class Falling(pygame.Rect):
         self.vals = valss
         self.plays = plays
         self.playedkeys = []
+        self.clock = pygame.time.Clock()
+        self.font = pygame.font.Font(None, 36)
         self.executor = ThreadPoolExecutor(max_workers=10)
         with open(f"jsons/{songname}.json") as f:
             self.song = json.load(f)
@@ -91,12 +93,19 @@ class Falling(pygame.Rect):
             durr = round((self.song[-1][2] + self.song[-1][1])/1000, 2)
             timenow = round((time.time() - self.start_time), 2)
             font = pygame.font.Font(None, 24)
-            text_surface = font.render(f"{round((allkey/numkey)*100, 2)} \n {timenow}/{durr}", True, Color.BLACK)
+            text_surface = font.render(f"{round((allkey/numkey)*100, 2)}%", True, Color.BLACK)
+            text2_surface = font.render(f"{timenow}/{durr}", True, Color.BLACK)
             rect = pygame.Rect(340, 30, 100, 60)
             pygame.draw.rect(self.screen, Color.WHITE, rect, 2)
             self.screen.blit(text_surface, (345, 35))
+            self.screen.blit(text2_surface, (345, 55))
 
     def update(self):
+        fps = self.clock.get_fps()
+
+        # Display FPS on the screen
+        fps_text = self.font.render(f"FPS: {int(fps)}", True, Color.WHITE)
+        self.screen.blit(fps_text, (10, 10))
         for i in range(len(self.keys)):  # iterate over the indices of the list
             key = self.keys[i]  # get the key at the current index
             timefrom = self.song[i][2]/1000
@@ -111,14 +120,10 @@ class Falling(pygame.Rect):
                         key.played = True
                         self.playedkeys.append(key)
                         self.play_wav(f"notes/{self.song[i][0]}.wav", self.song[i][1])
-                    if timefrom - 0.2 >time.time() - self.start_time > timefrom + 0.2:
+                    if  time.time() - self.start_time- 0.2 < time.time() - self.start_time < time.time() - self.start_time + 0.2:
                         note = self.song[i][0]
-                        if len(note) == 2:
-                            if note[0] in self.plays:
-                                key.correct = True
-                        else:
-                            if note[0]+note[1] in self.plays:
-                                key.correct = True
+                        if note[0] in self.plays:
+                            key.correct = True
 
             # redraw key
             if key.y + self.lengths[i] <= self.width/2 and key.y < self.height/2:
