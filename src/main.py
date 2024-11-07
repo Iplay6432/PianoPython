@@ -168,7 +168,7 @@ class PianoGame:
             for event in pygame.event.get():
                 for button in buttons:
                     if button.is_clicked(event):
-                        print(f"{button.text} button clicked")
+                        # print(f"{button.text} button clicked")
                         if button.midi != None:
                             self.gamestate = 1
                             self.Learning(str(button.midi))
