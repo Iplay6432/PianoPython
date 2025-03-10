@@ -7,7 +7,7 @@ import threading
 import time
 import pygame.mixer
 class Falling(pygame.Rect):
-    def __init__(self, note, screen, height, width, location, len, notes, songname, valss, plays):  # note is the index
+    def __init__(self, clock, note, screen, height, width, location, len, notes, songname, valss, plays):  # note is the index
         # super.__init__(args)
         self.note = note
         self.screen = screen
@@ -23,7 +23,7 @@ class Falling(pygame.Rect):
         self.vals = valss
         self.plays = plays
         self.playedkeys = []
-        self.clock = pygame.time.Clock()
+        self.clock = clock
         self.font = pygame.font.Font(None, 36)
         self.executor = ThreadPoolExecutor(max_workers=10)
         with open(f"jsons/{songname}.json") as f:
@@ -100,15 +100,15 @@ class Falling(pygame.Rect):
             self.screen.blit(text_surface, (345, 35))
             self.screen.blit(text2_surface, (345, 55))
 
-    def update(self):
+    def update(self,clock):
+        self.clock = clock
         fps = self.clock.get_fps()
         # print((self.song[-1][2] + self.song[-1][1])/1000)
         # print(time.time() - self.first_key_hit  -5)
         if time.time() - self.first_key_hit  -5 > (self.song[-1][2] + self.song[-1][1])  and self.first_key_hit != 0:
            return 99
         # Display FPS on the screen
-        fps_text = self.font.render(f"FPS: {int(fps)}", True, Color.WHITE)
-        self.screen.blit(fps_text, (10, 10))
+
         for i in range(len(self.keys)):  # iterate over the indices of the list
             key = self.keys[i]  # get the key at the current index
             timefrom = self.song[i][2]/1000
@@ -141,6 +141,8 @@ class Falling(pygame.Rect):
                 key_rect = pygame.Rect(key.x, key.y, key.width, lens)
                 pygame.draw.rect(self.screen, key.current_color, key_rect)
                 pygame.draw.rect(self.screen, Color.BLUE, key_rect, 1)
+        fps_text = self.font.render(f"FPS: {int(fps)}", True, Color.WHITE)
+        self.screen.blit(fps_text, (10, 10))
 
 
         d = 0

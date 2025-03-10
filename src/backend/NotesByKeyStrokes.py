@@ -26,6 +26,8 @@ class NotesByKeyStrokes:
             self.keyOn[9] = 1
         if keyboard.is_pressed("'"):
             self.keyOn[10] = 1
-        if keyboard.is_pressed("/"):
+        if keyboard.is_pressed("enter"):
             self.keyOn[11] = 1
+        if keyboard.is_pressed("2"):
+            self.keyOn[12] = 1
         return self.keyOn
